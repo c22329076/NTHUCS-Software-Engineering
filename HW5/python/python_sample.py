@@ -102,8 +102,8 @@ def makeDataBatches(batch_size, data_x_part, data_y_part):
     index_list, start = [], 0
     
     while True:
-        if (start+batch_size) > data_x_part.shape[1]:
-            continue
+        if ((start+batch_size) > data_x_part.shape[1]):
+            break
         index_list.append( (start, start+batch_size) )
         start += batch_size
     index_list.append( (start, data_x_part.shape[1]) )
