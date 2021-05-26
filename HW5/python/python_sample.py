@@ -205,7 +205,7 @@ def forwardPropagate(model, data_x_part):
 def backwardPropagate(model, Intermediates, truth_y):
     # Prepare 'Z' and 'A' for convenient notation which would be used later.
     Z, A = {}, []
-    for i in range(len(Intermediates))
+    for i in range(len(Intermediates)):
         Z[i-1] = Intermediates[i]['pre_act']
         A[i-1] = Intermediates[i]['post_act']
     
@@ -290,7 +290,7 @@ def avoidZeroValue(numpy_ndarray):
 def printEpochAndLoss(model, data_x_part, data_y_part, epoch):
     ce_loss = 0.0
     predict_y_s = inference(model, data_x_part)
-    for i in range(predict_y_s.shape[1])
+    for i in range(predict_y_s.shape[1]):
         ce_loss += FUNC.crossEntropy(predict_y_s[:, i], data_y_part[:, i])
     print("Epoch=%d, Total loss=%.2f"%(int(epoch), ce_loss/epoch))
 
