@@ -90,8 +90,8 @@ class AvlTree<T extends Comparable<? super T>> {
    */  
   public int max (int a, int b){
     if (a > b)
-      return b;
-    return a;
+      return a;
+    return b;
   }
   
   /**
@@ -140,7 +140,7 @@ class AvlTree<T extends Comparable<? super T>> {
     else if (x.compareTo (t.element) > 0){
       t.right = insert (x, t.right);
       
-      if (height (t.left) - height (t.right) == 2)
+      if (height (t.left) - height (t.right) == 2) {
         if (x.compareTo (t.right.element) > 0){
           t = rotateWithRightChild (t);
           countSingleRotations++;
@@ -149,6 +149,7 @@ class AvlTree<T extends Comparable<? super T>> {
           t = doubleWithRightChild (t);
           countDoubleRotations++;
         }
+      }
     }
     else {
       throw new Exception("Attempting to insert duplicate value");
@@ -248,10 +249,10 @@ class AvlTree<T extends Comparable<? super T>> {
    */
   protected void serializeInfix(AvlNode<T> t, StringBuilder str, String sep){
     if (t != null){
-      serializeInfix (t.right, str, sep);
+      serializeInfix (t.left, str, sep);
       str.append(t.element.toString());
       str.append(sep);
-      serializeInfix (t.left, str, sep);
+      serializeInfix (t.right, str, sep);
     }    
   }
   
@@ -279,8 +280,8 @@ class AvlTree<T extends Comparable<? super T>> {
     if (t != null){
       str.append(t.element.toString());
       str.append(sep);
-      serializePrefix (t.right, str, sep);
       serializePrefix (t.left, str, sep);
+      serializePrefix (t.right, str, sep);
     }
   }
   
@@ -335,7 +336,7 @@ class AvlTree<T extends Comparable<? super T>> {
             return t;
 
         while( t.left != null )
-            t = t.right;
+            t = t.left;
         return t;
     }
 
@@ -350,7 +351,7 @@ class AvlTree<T extends Comparable<? super T>> {
             return t;
 
         while( t.right != null )
-            t = t.left;
+            t = t.right;
         return t;
     }
 
@@ -446,7 +447,7 @@ class AvlTree<T extends Comparable<? super T>> {
     if (t == null){
       return false; // The node was not found
 
-    } else if (x.compareTo(t.element) > 0){
+    } else if (x.compareTo(t.element) < 0){
       return contains(x, t.left);
     } else if (x.compareTo(t.element) > 0){
       return contains(x, t.right); 
