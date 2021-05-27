@@ -90,8 +90,8 @@ class AvlTree<T extends Comparable<? super T>> {
    */  
   public int max (int a, int b){
     if (a > b)
-      return b;
-    return a;
+      return a;
+    return b;
   }
   
   /**
