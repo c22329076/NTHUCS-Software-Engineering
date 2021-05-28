@@ -1,6 +1,6 @@
 import java.lang.StringBuilder;
 
-class AvlTree<T extends Comparable<? super T>> {
+public class AvlTree<T extends Comparable<? super T>> {
   /** 
    * AvlNode is a container class that is used to store each element 
    * (node) of an AVL tree. 
@@ -121,12 +121,12 @@ class AvlTree<T extends Comparable<? super T>> {
    * @throws Exception 
    */
   protected AvlNode<T> insert (T x, AvlNode<T> t) throws Exception{
-    if (t == null)
+    if (t == null){
       t = new AvlNode<T> (x);
+    }
     else if (x.compareTo (t.element) < 0){
       t.left = insert (x, t.left);
-      
-      if (height (t.right) - height (t.left) == 2){
+      if (height (t.left) - height (t.right) >= 2){
         if (x.compareTo (t.left.element) < 0){
           t = rotateWithLeftChild (t);
           countSingleRotations++;
@@ -140,7 +140,7 @@ class AvlTree<T extends Comparable<? super T>> {
     else if (x.compareTo (t.element) > 0){
       t.right = insert (x, t.right);
       
-      if (height (t.left) - height (t.right) == 2) {
+      if (height (t.right) - height (t.left) >= 2)
         if (x.compareTo (t.right.element) > 0){
           t = rotateWithRightChild (t);
           countSingleRotations++;
@@ -149,12 +149,10 @@ class AvlTree<T extends Comparable<? super T>> {
           t = doubleWithRightChild (t);
           countDoubleRotations++;
         }
-      }
     }
     else {
       throw new Exception("Attempting to insert duplicate value");
     }
-    
     t.height = max (height (t.left), height (t.right)) + 1;
     return t;
   }
@@ -170,11 +168,11 @@ class AvlTree<T extends Comparable<? super T>> {
   protected AvlNode<T> rotateWithLeftChild (AvlNode<T> k2){
     AvlNode<T> k1 = k2.left;
     
-    k1.right = k2.left;
-    k2.left = k1;
+    k2.left = k1.right;
+    k1.right = k2;
     
     k2.height = max (height (k2.left), height (k2.right)) + 1;
-    k1.height = max (height (k1.left), k2.height) + 1;
+    k1.height = max (height (k1.left), height (k1.right)) + 1;
     
     return (k1);
   }
@@ -204,11 +202,11 @@ class AvlTree<T extends Comparable<? super T>> {
   protected AvlNode<T> rotateWithRightChild (AvlNode<T> k1){
     AvlNode<T> k2 = k1.right;
     
-    k2.left = k1.right;
-    k1.right = k2;
+    k1.right = k2.left;
+    k2.left = k1;
     
     k1.height = max (height (k1.left), height (k1.right)) + 1;
-    k2.height = max (height (k2.right), k1.height) + 1;
+    k2.height = max (height (k2.left), height (k2.right)) + 1;
     
     return (k2);
   }
@@ -336,7 +334,7 @@ class AvlTree<T extends Comparable<? super T>> {
             return t;
 
         while( t.left != null )
-            t = t.left;
+            t = t.right;
         return t;
     }
 
@@ -351,7 +349,7 @@ class AvlTree<T extends Comparable<? super T>> {
             return t;
 
         while( t.right != null )
-            t = t.right;
+            t = t.left;
         return t;
     }
 
@@ -434,7 +432,7 @@ class AvlTree<T extends Comparable<? super T>> {
    * @return True if the element is found, false otherwise
    */
   public boolean contains(T x){
-    return contains(x, root)
+    return contains(x, root);
   }
 
   /**
@@ -447,7 +445,7 @@ class AvlTree<T extends Comparable<? super T>> {
     if (t == null){
       return false; // The node was not found
 
-    } else if (x.compareTo(t.element) < 0){
+    } else if (x.compareTo(t.element) > 0){
       return contains(x, t.left);
     } else if (x.compareTo(t.element) > 0){
       return contains(x, t.right); 
@@ -470,7 +468,7 @@ class AvlTree<T extends Comparable<? super T>> {
     
     if (current.left != null) {
       balancedLeft = checkBalanceOfTree(current.left);
-      leftHeight = getDepth(current.left)
+      leftHeight = getDepth(current.left);
     }
     
     return balancedLeft && balancedRight && Math.abs(leftHeight - rightHeight) < 2;
@@ -503,12 +501,16 @@ class AvlTree<T extends Comparable<? super T>> {
     
     return true;
   }
-
+  
   /**
    * Main entry point; contains test code for the tree.
    */
   public static void main (String []args){
     AvlTree<Integer> t = new AvlTree<>();
+    
+    // t.insert (5);
+    // t.insert (1);
+    // t.insert (3);
     
     t.insert (2);
     t.insert (1);
