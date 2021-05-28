@@ -334,7 +334,7 @@ public class AvlTree<T extends Comparable<? super T>> {
             return t;
 
         while( t.left != null )
-            t = t.right;
+            t = t.left;
         return t;
     }
 
@@ -349,7 +349,7 @@ public class AvlTree<T extends Comparable<? super T>> {
             return t;
 
         while( t.right != null )
-            t = t.left;
+            t = t.right;
         return t;
     }
 
@@ -368,7 +368,7 @@ public class AvlTree<T extends Comparable<? super T>> {
       }
       System.out.println("Remove starts... " + t.element + " and " + x);
   
-      if (x.compareTo(t.element) > 0 ) {
+      if (x.compareTo(t.element) < 0 ) {
           t.left = remove(x,t.left);
           int l = t.left != null ? t.left.height : 0;
   
@@ -382,7 +382,7 @@ public class AvlTree<T extends Comparable<? super T>> {
                   t = doubleWithRightChild(t);
           }
       }
-      else if (x.compareTo(t.element) < 0) {
+      else if (x.compareTo(t.element) > 0) {
           t.right = remove(x,t.right);
           int r = t.right != null ? t.right.height : 0;
           if((t.left != null) && (t.left.height - r >= 2)) {
@@ -445,7 +445,7 @@ public class AvlTree<T extends Comparable<? super T>> {
     if (t == null){
       return false; // The node was not found
 
-    } else if (x.compareTo(t.element) > 0){
+    } else if (x.compareTo(t.element) < 0){
       return contains(x, t.left);
     } else if (x.compareTo(t.element) > 0){
       return contains(x, t.right); 
@@ -507,10 +507,6 @@ public class AvlTree<T extends Comparable<? super T>> {
    */
   public static void main (String []args){
     AvlTree<Integer> t = new AvlTree<>();
-    
-    // t.insert (5);
-    // t.insert (1);
-    // t.insert (3);
     
     t.insert (2);
     t.insert (1);
