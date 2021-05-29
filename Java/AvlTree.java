@@ -370,27 +370,27 @@ public class AvlTree<T extends Comparable<? super T>> {
   
       if (x.compareTo(t.element) < 0 ) {
           t.left = remove(x,t.left);
-          int l = t.left != null ? t.left.height : 0;
+          int l = t.left != null ? t.left.height : -1;
   
           if((t.right != null) && (t.right.height - l >= 2)) {
-              int rightHeight = t.right.right != null ? t.right.right.height : 0;
-              int leftHeight = t.right.left != null ? t.right.left.height : 0;
+              int rightHeight = t.right.right != null ? t.right.right.height : -1;
+              int leftHeight = t.right.left != null ? t.right.left.height : -1;
   
               if(rightHeight >= leftHeight)
-                  t = rotateWithLeftChild(t);            
+                  t = rotateWithRightChild(t);            
               else
                   t = doubleWithRightChild(t);
           }
       }
       else if (x.compareTo(t.element) > 0) {
           t.right = remove(x,t.right);
-          int r = t.right != null ? t.right.height : 0;
+          int r = t.right != null ? t.right.height : -1;
           if((t.left != null) && (t.left.height - r >= 2)) {
-              int leftHeight = t.left.left != null ? t.left.left.height : 0;
-              int rightHeight = t.left.right != null ? t.left.right.height : 0;
+              int leftHeight = t.left.left != null ? t.left.left.height : -1;
+              int rightHeight = t.left.right != null ? t.left.right.height : -1;
 
               if(leftHeight >= rightHeight)
-                  t = rotateWithRightChild(t);               
+                  t = rotateWithLeftChild(t);               
               else
                   t = doubleWithLeftChild(t);
           }
@@ -400,26 +400,25 @@ public class AvlTree<T extends Comparable<? super T>> {
          Check if there is a left-hand node, if so pick out the largest element out, and move down to the root.
        */
       else if(t.left != null) {
-          t.element = findMax(t.left).element;
-          remove(t.element, t.left);
-       
+          t = findMax(t.left);
           if((t.right != null) && (t.right.height - t.left.height >= 2)) {
-              int rightHeight = t.right.right != null ? t.right.right.height : 0;
-              int leftHeight = t.right.left != null ? t.right.left.height : 0;
+              int rightHeight = t.right.right != null ? t.right.right.height : -1;
+              int leftHeight = t.right.left != null ? t.right.left.height : -1;
 
-              if(rightHeight >= leftHeight)
-                  t = rotateWithLeftChild(t);            
+              if(rightHeight > leftHeight)
+                  t = rotateWithRightChild(t);            
               else
                   t = doubleWithRightChild(t);
           }
       }
        
-      else
+      else{
           t = (t.left != null) ? t.left : t.right;
+      }
        
       if(t != null) {
-          int leftHeight = t.left != null ? t.left.height : 0;
-          int rightHeight = t.right!= null ? t.right.height : 0;
+          int leftHeight = t.left != null ? t.left.height : -1;
+          int rightHeight = t.right!= null ? t.right.height : -1;
           t.height = Math.max(leftHeight,rightHeight) + 1;
       }
       return t;
@@ -475,7 +474,7 @@ public class AvlTree<T extends Comparable<? super T>> {
   }
   
   public int getDepth(AvlTree.AvlNode<Integer> n) {
-    int leftHeight = 0, rightHeight = 0;
+    int leftHeight = -1, rightHeight = -1;
     
     if (n.right != null)
       rightHeight = getDepth(n.right);
